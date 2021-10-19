@@ -14,7 +14,7 @@ const OrdersList = (props) => {
       hour: dateObject.getHours() % 12 || 12,
       minute: dateObject.getMinutes().toString().padStart(2, "0"),
       seconds: dateObject.getSeconds().toString().padStart(2, "0"),
-      am_pm: dateObject.getHours() < 12 ? "AM" : "PM",
+      am_pm: dateObject.getHours() < 12 ? " AM" : " PM",
     };
     return `${data.hour}:${data.minute}:${data.seconds}${data.am_pm}`;
   };
