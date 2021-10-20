@@ -10,13 +10,12 @@ const OrdersList = (props) => {
     );
 
   const formatTime = (dateObject) => {
-    const data = {
-      hour: dateObject.getHours() % 12 || 12,
+    const time = {
+      hour: dateObject.getHours().toString().padStart(2, "0"),
       minute: dateObject.getMinutes().toString().padStart(2, "0"),
       seconds: dateObject.getSeconds().toString().padStart(2, "0"),
-      am_pm: dateObject.getHours() < 12 ? " AM" : " PM",
     };
-    return `${data.hour}:${data.minute}:${data.seconds}${data.am_pm}`;
+    return `${time.hour}:${time.minute}:${time.seconds}`;
   };
 
   return orders.map((order) => {
