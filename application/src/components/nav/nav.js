@@ -20,7 +20,7 @@ const Nav = (props) => {
         </div>
       </Link>
       <Link
-        to={"/login"}
+        to={"/"}
         onClick={() => dispatch(logoutUser())}
         className="nav-link"
       >
