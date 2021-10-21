@@ -5,14 +5,17 @@ import "./login.css";
 
 const Login = (props) => {
   const token = useSelector((state) => state.auth.token);
+  useEffect(() => {
+    if (token) {
+      props.history.push("/view-orders");
+    }
+  }, [token]);
 
   return (
     <div className="main-body">
       <h1 className="text-center">Login Screen</h1>
       <div className="d-flex justify-content-center mt-5">
-        <LoginForm
-          onClick={token ? props.history.push("/view-orders") : null}
-        />
+        <LoginForm />
       </div>
     </div>
   );
