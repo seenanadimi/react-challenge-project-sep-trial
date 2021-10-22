@@ -17,7 +17,7 @@ export default function ViewOrders(props) {
                     console.log('Error getting orders');
                 }
             });
-    }, [])
+    }, [orders])
 
     return (
         <Template>
