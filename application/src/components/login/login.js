@@ -7,7 +7,7 @@ const Login = (props) => {
   const token = useSelector((state) => state.auth.token);
   useEffect(() => {
     if (token) {
-      props.history.push("/view-orders");
+      props.history.push("/order");
     }
   }, [token]);
 
