@@ -28,8 +28,7 @@ const OrdersList = (props) => {
     fetch(DELETE_ORDER, {
       method: "POST",
       body: JSON.stringify({
-        id: id,
-        ordered_by: auth.email || "Unknown!",
+        id: id
       }),
       headers: {
         "Content-Type": "application/json",
@@ -38,6 +37,7 @@ const OrdersList = (props) => {
       .then((res) => res.json())
       .then((response) => console.log("Success", JSON.stringify(response)))
       .catch((error) => console.error(error));
+      props.setLoading(!props.loading);
   };
 
   return orders.map((order) => {
