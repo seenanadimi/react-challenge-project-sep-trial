@@ -1,13 +1,9 @@
 import React from "react";
 import { SERVER_IP } from "../../private";
-import { useSelector, useDispatch } from "react-redux";
-import { setBool } from "../../redux/actions/loadingAction";
 
 const DELETE_ORDER = `${SERVER_IP}/api/delete-order`;
 
 const OrdersList = (props) => {
-  const bool = useSelector((state) => state.bool);
-  const dispatch = useDispatch();
   const { orders } = props;
   if (!props || !props.orders || !props.orders.length)
     return (
@@ -38,7 +34,6 @@ const OrdersList = (props) => {
       .then((res) => res.json())
       .then((response) => console.log("Success", JSON.stringify(response)))
       .catch((error) => console.error(error));
-    dispatch(setBool(bool));
   };
 
   return orders.map((order) => {

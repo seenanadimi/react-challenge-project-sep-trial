@@ -1,6 +1,6 @@
-export const setBool = (bool) => {
+export const setBool = (e) => {
   return {
     type: "BOOLEAN",
-    bool: bool,
+    payload: e,
   };
 };
