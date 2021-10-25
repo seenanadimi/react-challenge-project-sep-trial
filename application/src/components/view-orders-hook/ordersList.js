@@ -4,7 +4,7 @@ import { SERVER_IP } from "../../private";
 const DELETE_ORDER = `${SERVER_IP}/api/delete-order`;
 
 const OrdersList = (props) => {
-  const { orders } = props;
+  const { orders, setBoolean } = props;
   if (!props || !props.orders || !props.orders.length)
     return (
       <div className="empty-orders">
@@ -34,6 +34,7 @@ const OrdersList = (props) => {
       .then((res) => res.json())
       .then((response) => console.log("Success", JSON.stringify(response)))
       .catch((error) => console.error(error));
+    setBoolean(true);
   };
 
   return orders.map((order) => {
@@ -52,7 +53,9 @@ const OrdersList = (props) => {
           <button className="btn btn-success">Edit</button>
           <button
             className="btn btn-danger"
-            onClick={() => deleteOrder(order._id)}
+            onClick={() => {
+              deleteOrder(order._id);
+            }}
           >
             Delete
           </button>

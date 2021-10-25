@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Template } from "../../components";
 import { SERVER_IP } from "../../private";
+import { setBool } from "../../redux/actions/loadingAction";
+
 import "./orderForm.css";
 
 const ADD_ORDER_URL = `${SERVER_IP}/api/add-order`;
@@ -9,7 +11,7 @@ const ADD_ORDER_URL = `${SERVER_IP}/api/add-order`;
 export default function OrderForm(props) {
   const [orderItem, setOrderItem] = useState("");
   const [quantity, setQuantity] = useState("1");
-
+  const dispatch = useDispatch();
   const menuItemChosen = (event) => setOrderItem(event.target.value);
   const menuQuantityChosen = (event) => setQuantity(event.target.value);
 
@@ -31,6 +33,7 @@ export default function OrderForm(props) {
       .then((res) => res.json())
       .then((response) => console.log("Success", JSON.stringify(response)))
       .catch((error) => console.error(error));
+    // dispatch(setBool());
   };
 
   return (

@@ -6,7 +6,7 @@ import "./viewOrders.css";
 
 export default function ViewOrders(props) {
   const [orders, setOrders] = useState([]);
-  const [newOrderList, setNewOrderList] = useState([]);
+  const [bool, setBoolean] = useState(false);
 
   useEffect(() => {
     fetch(`${SERVER_IP}/api/current-orders`)
@@ -14,45 +14,17 @@ export default function ViewOrders(props) {
       .then((response) => {
         if (response.success) {
           setOrders(response.orders);
-          setNewOrderList(...orders);
         } else {
           console.log("Error getting orders");
         }
       });
-  }, [newOrderList]);
-  
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   const fetchData = async () => {
-  //     const response = await fetch(`${SERVER_IP}/api/current-orders`);
-  //     const newData = await response.json();
-  //     if (isMounted) {
-  //       setOrders(newData.orders);
-  //       setNewList(...orders);
-  //     }
-  //   };
-  //   fetchData();
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, [newList]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const fetchData = await fetch(`${SERVER_IP}/api/current-orders`);
-  //     const response = await fetchData.json();
-  //     if (response.success) {
-  //       setOrders(response.orders);
-  //     } else {
-  //       console.log("Error getting orders");
-  //     }
-  //   })();
-  // }, [loading]);
+    setBoolean(false);
+  }, [bool]);
 
   return (
     <Template>
       <div className="container-fluid">
-        <OrdersList orders={orders} />
+        <OrdersList orders={orders} setBoolean={setBoolean} />
       </div>
     </Template>
   );
