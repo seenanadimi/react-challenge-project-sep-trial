@@ -1,6 +1,7 @@
 import React from "react";
 import { SERVER_IP } from "../../private";
 
+const EDIT_ORDER = `${SERVER_IP}/api/edit-order`;
 const DELETE_ORDER = `${SERVER_IP}/api/delete-order`;
 
 const OrdersList = (props) => {
@@ -37,6 +38,25 @@ const OrdersList = (props) => {
     setBoolean(true);
   };
 
+  const editOrder = (id, orderItem, quantity, edit) => {
+    fetch(EDIT_ORDER, {
+      method: "POST",
+      body: JSON.stringify({
+        id: id,
+        order_item: orderItem,
+        quantity,
+        ordered_by: edit,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => console.log("Success", JSON.stringify(response)))
+      .catch((error) => console.error(error));
+    setBoolean(true);
+  };
+
   return orders.map((order) => {
     const createdDate = new Date(order.createdAt);
     return (
@@ -50,7 +70,14 @@ const OrdersList = (props) => {
           <p>Quantity: {order.quantity}</p>
         </div>
         <div className="col-md-4 view-order-right-col">
-          <button className="btn btn-success">Edit</button>
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              editOrder(order._id);
+            }}
+          >
+            Edit
+          </button>
           <button
             className="btn btn-danger"
             onClick={() => {
