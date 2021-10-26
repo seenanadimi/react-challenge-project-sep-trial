@@ -1,14 +1,14 @@
 import React from "react";
+import Order from "./Order";
 import { SERVER_IP } from "../../private";
-import { useSelector, useDispatch } from "react-redux";
-import { setBool } from "../../redux/actions/loadingAction";
+import { useSelector } from "react-redux";
 
+const EDIT_ORDER = `${SERVER_IP}/api/edit-order`;
 const DELETE_ORDER = `${SERVER_IP}/api/delete-order`;
 
 const OrdersList = (props) => {
-  const bool = useSelector((state) => state.bool);
-  const dispatch = useDispatch();
-  const { orders } = props;
+  const auth = useSelector((state) => state.auth);
+  const { orders, setBoolean } = props;
   if (!props || !props.orders || !props.orders.length)
     return (
       <div className="empty-orders">
@@ -38,30 +38,39 @@ const OrdersList = (props) => {
       .then((res) => res.json())
       .then((response) => console.log("Success", JSON.stringify(response)))
       .catch((error) => console.error(error));
-    dispatch(setBool(bool));
+    setBoolean(true);
+  };
+
+  const editOrder = (id, orderItem, quantity) => {
+    fetch(EDIT_ORDER, {
+      method: "POST",
+      body: JSON.stringify({
+        id: id,
+        order_item: orderItem,
+        quantity,
+        ordered_by: auth.email || "Unknown!",
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => console.log("Success", JSON.stringify(response)))
+      .catch((error) => console.error(error));
+    setBoolean(true);
   };
 
   return orders.map((order) => {
-    const createdDate = new Date(order.createdAt);
     return (
-      <div className="row view-order-container" key={order._id}>
-        <div className="col-md-4 view-order-left-col p-3">
-          <h2>{order.order_item}</h2>
-          <p>Ordered by: {order.ordered_by || ""}</p>
-        </div>
-        <div className="col-md-4 d-flex view-order-middle-col">
-          <p>Order placed at {formatTime(createdDate)}</p>
-          <p>Quantity: {order.quantity}</p>
-        </div>
-        <div className="col-md-4 view-order-right-col">
-          <button className="btn btn-success">Edit</button>
-          <button
-            className="btn btn-danger"
-            onClick={() => deleteOrder(order._id)}
-          >
-            Delete
-          </button>
-        </div>
+      <div key={order._id}>
+        <Order
+          order={order}
+          orders={orders}
+          setBoolean={setBoolean}
+          formatTime={formatTime}
+          editOrder={editOrder}
+          deleteOrder={deleteOrder}
+        />
       </div>
     );
   });
