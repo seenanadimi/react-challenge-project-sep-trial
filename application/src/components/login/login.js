@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import LoginForm from "./login-form/loginForm";
 import "./login.css";
@@ -9,7 +9,7 @@ const Login = (props) => {
     if (token) {
       props.history.push("/order");
     }
-  }, [token]);
+  }, [props.history, token]);
 
   return (
     <div className="main-body">

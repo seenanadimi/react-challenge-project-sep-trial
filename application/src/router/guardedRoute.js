@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
-const GaurdedRoute = ({ component: Component, ...rest }) => {
+const GuardedRoute = ({ component: Component, ...rest }) => {
   const token = useSelector((state) => state.auth.token);
   return (
     <Route {...rest}>
@@ -11,4 +11,4 @@ const GaurdedRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default GaurdedRoute;
+export default GuardedRoute;
