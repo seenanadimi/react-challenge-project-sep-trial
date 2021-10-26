@@ -9,7 +9,7 @@ const Login = (props) => {
     if (token) {
       props.history.push("/order");
     }
-  }, [token]);
+  }, [props.history, token]);
 
   return (
     <div className="main-body">
