@@ -4,7 +4,7 @@ import { SERVER_IP } from "../../private";
 import OrdersList from "./ordersList";
 import "./viewOrders.css";
 
-export default function ViewOrders(props) {
+export default function ViewOrders() {
   const [orders, setOrders] = useState([]);
   const [bool, setBoolean] = useState(false);
 

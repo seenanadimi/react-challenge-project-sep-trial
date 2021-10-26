@@ -1,10 +1,13 @@
 import React from "react";
+import Order from "./Order";
 import { SERVER_IP } from "../../private";
+import { useSelector } from "react-redux";
 
 const EDIT_ORDER = `${SERVER_IP}/api/edit-order`;
 const DELETE_ORDER = `${SERVER_IP}/api/delete-order`;
 
 const OrdersList = (props) => {
+  const auth = useSelector((state) => state.auth);
   const { orders, setBoolean } = props;
   if (!props || !props.orders || !props.orders.length)
     return (
@@ -38,14 +41,14 @@ const OrdersList = (props) => {
     setBoolean(true);
   };
 
-  const editOrder = (id, orderItem, quantity, edit) => {
+  const editOrder = (id, orderItem, quantity) => {
     fetch(EDIT_ORDER, {
       method: "POST",
       body: JSON.stringify({
         id: id,
         order_item: orderItem,
         quantity,
-        ordered_by: edit,
+        ordered_by: auth.email || "Unknown!",
       }),
       headers: {
         "Content-Type": "application/json",
@@ -58,35 +61,16 @@ const OrdersList = (props) => {
   };
 
   return orders.map((order) => {
-    const createdDate = new Date(order.createdAt);
     return (
-      <div className="row view-order-container" key={order._id}>
-        <div className="col-md-4 view-order-left-col p-3">
-          <h2>{order.order_item}</h2>
-          <p>Ordered by: {order.ordered_by || ""}</p>
-        </div>
-        <div className="col-md-4 d-flex view-order-middle-col">
-          <p>Order placed at {formatTime(createdDate)}</p>
-          <p>Quantity: {order.quantity}</p>
-        </div>
-        <div className="col-md-4 view-order-right-col">
-          <button
-            className="btn btn-success"
-            onClick={() => {
-              editOrder(order._id);
-            }}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => {
-              deleteOrder(order._id);
-            }}
-          >
-            Delete
-          </button>
-        </div>
+      <div key={order._id}>
+        <Order
+          order={order}
+          orders={orders}
+          setBoolean={setBoolean}
+          formatTime={formatTime}
+          editOrder={editOrder}
+          deleteOrder={deleteOrder}
+        />
       </div>
     );
   });
