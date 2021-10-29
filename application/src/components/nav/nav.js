@@ -2,13 +2,19 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./nav.css";
 import { logoutUser } from "../../redux/actions/authActions.js";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const Nav = (props) => {
+  const email = useSelector((state) => state.auth.email);
   const dispatch = useDispatch();
 
   return (
     <div className="nav-strip">
+      <div className="nav-link">
+        <div className="nav-link-style">
+          <label className="nav-label ">User: {email}</label>
+        </div>
+      </div>
       <Link to={"/order"} className="nav-link">
         <div className="nav-link-style">
           <label className="nav-label">Order Form</label>
