@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
-const EditForm = ({ order, editOrder, showEditForm }) => {
+const EditForm = ({ order, handleEditOrder, showEditForm }) => {
   const [orderItem, setOrderItem] = useState("");
   const [quantity, setQuantity] = useState(1);
   const menuItemChosen = (event) => setOrderItem(event.target.value);
   const menuQuantityChosen = (event) => setQuantity(event.target.value);
-
 
   return (
     <div key={order._id} className="form-wrapper">
@@ -46,7 +45,7 @@ const EditForm = ({ order, editOrder, showEditForm }) => {
           type="button"
           className="order-btn"
           onClick={() => {
-            editOrder(order._id, orderItem, quantity);
+            handleEditOrder(order._id, orderItem, quantity);
             showEditForm(false);
           }}
         >

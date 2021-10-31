@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Template } from "../../components";
-import { SERVER_IP } from "../../private";
-
+import { addOrder } from "../../redux/actions/orderAction";
 import "./orderForm.css";
 
-const ADD_ORDER_URL = `${SERVER_IP}/api/add-order`;
-
-export default function OrderForm(props) {
+export default function OrderForm() {
+  const dispatch = useDispatch();
   const [orderItem, setOrderItem] = useState("");
   const [quantity, setQuantity] = useState("1");
   const menuItemChosen = (event) => setOrderItem(event.target.value);
@@ -17,20 +15,7 @@ export default function OrderForm(props) {
 
   const submitOrder = () => {
     if (orderItem === "") return;
-    fetch(ADD_ORDER_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        order_item: orderItem,
-        quantity,
-        ordered_by: auth.email || "Unknown!",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => console.log("Success", JSON.stringify(response)))
-      .catch((error) => console.error(error));
+    dispatch(addOrder(orderItem, quantity, auth));
   };
 
   return (

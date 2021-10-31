@@ -6,5 +6,5 @@ import orderReducer from "./orderReducer";
 export default combineReducers({
   temp: TempReducer,
   auth: authReducer,
-  order: orderReducer,
+  orderList: orderReducer,
 });

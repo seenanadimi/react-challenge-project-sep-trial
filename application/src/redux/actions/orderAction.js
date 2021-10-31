@@ -2,10 +2,10 @@ import axios from "axios";
 import { SERVER_IP } from "../../private";
 import { FETCH_ORDER_SUCCESS, FETCH_ORDER_FAILURE } from "./types";
 
-export const fetchOrderSuccess = (order) => {
+export const fetchOrderSuccess = (orders) => {
   return {
     type: FETCH_ORDER_SUCCESS,
-    payload: order,
+    payload: orders,
   };
 };
 export const fetchOrderFailure = (error) => {
@@ -27,7 +27,7 @@ export const addOrder = (orderItem, quantity, auth) => {
     let data = JSON.stringify({
       order_item: orderItem,
       quantity,
-      ordered_by: auth.email || "Unknown!"
+      ordered_by: auth.email || "Unknown!",
     });
     axios
       .post(`${SERVER_IP}/api/add-order`, data, {

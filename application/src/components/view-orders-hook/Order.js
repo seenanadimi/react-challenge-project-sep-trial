@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EditForm from "./EditForm";
 
-const Order = ({ order, formatTime, deleteOrder, editOrder }) => {
+const Order = ({ order, formatTime, handleDeleteOrder, handleEditOrder }) => {
   const [editForm, showEditForm] = useState(false);
   const createdDate = new Date(order.createdAt);
   return (
@@ -26,7 +26,7 @@ const Order = ({ order, formatTime, deleteOrder, editOrder }) => {
         <button
           className="btn btn-danger"
           onClick={() => {
-            deleteOrder(order._id);
+            handleDeleteOrder(order._id);
           }}
         >
           Delete
@@ -35,7 +35,7 @@ const Order = ({ order, formatTime, deleteOrder, editOrder }) => {
       {editForm === true && (
         <EditForm
           order={order}
-          editOrder={editOrder}
+          handleEditOrder={handleEditOrder}
           showEditForm={showEditForm}
         />
       )}
