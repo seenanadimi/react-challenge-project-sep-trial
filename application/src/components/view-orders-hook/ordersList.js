@@ -1,14 +1,14 @@
 import React from "react";
 import Order from "./Order";
-import { SERVER_IP } from "../../private";
-import { useSelector } from "react-redux";
-
-const EDIT_ORDER = `${SERVER_IP}/api/edit-order`;
-const DELETE_ORDER = `${SERVER_IP}/api/delete-order`;
+import { useSelector, useDispatch } from "react-redux";
+import { deleteOrder, editOrder } from "../../redux/actions/orderAction";
 
 const OrdersList = (props) => {
+  const dispatch = useDispatch();
+  const orders = useSelector((state) => state.orderList.orders);
   const auth = useSelector((state) => state.auth);
-  const { orders, setBoolean } = props;
+
+  const { setBoolean } = props;
   if (!props || !props.orders || !props.orders.length)
     return (
       <div className="empty-orders">
@@ -25,38 +25,13 @@ const OrdersList = (props) => {
     return `${time.hour}:${time.minute}:${time.seconds}`;
   };
 
-  const deleteOrder = (id) => {
-    fetch(DELETE_ORDER, {
-      method: "POST",
-      body: JSON.stringify({
-        id: id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => console.log("Success", JSON.stringify(response)))
-      .catch((error) => console.error(error));
+  const handleDeleteOrder = (id) => {
+    dispatch(deleteOrder(id));
     setBoolean(true);
   };
 
-  const editOrder = (id, orderItem, quantity) => {
-    fetch(EDIT_ORDER, {
-      method: "POST",
-      body: JSON.stringify({
-        id: id,
-        order_item: orderItem,
-        quantity,
-        ordered_by: auth.email || "Unknown!",
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => console.log("Success", JSON.stringify(response)))
-      .catch((error) => console.error(error));
+  const handleEditOrder = (id, orderItem, quantity) => {
+    dispatch(editOrder(id, orderItem, quantity, auth));
     setBoolean(true);
   };
 
@@ -65,11 +40,10 @@ const OrdersList = (props) => {
       <div key={order._id}>
         <Order
           order={order}
-          orders={orders}
           setBoolean={setBoolean}
           formatTime={formatTime}
-          editOrder={editOrder}
-          deleteOrder={deleteOrder}
+          handleEditOrder={handleEditOrder}
+          handleDeleteOrder={handleDeleteOrder}
         />
       </div>
     );
