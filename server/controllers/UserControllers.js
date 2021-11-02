@@ -53,7 +53,7 @@ module.exports = {
           .status(400)
           .json({ msg: "No account with this email has been registered!" });
       }
-      
+
       // const isMatch = await bcrypt.compare(password, user.password);
       // if (!isMatch) {
       //   res.status(400).json({ msg: "Invalid credentials!" });
