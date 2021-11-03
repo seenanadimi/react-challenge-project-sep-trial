@@ -22,13 +22,13 @@ module.exports = {
         return res.status(400).json({ msg: "User with email already exists!" });
       }
 
-      //   const salt = await bcrypt.genSalt();
-      //   const passHash = await bcrypt.hash(password, salt);
+      const salt = await bcrypt.genSalt();
+      const passHash = await bcrypt.hash(password, salt);
 
       const newUser = new User({
         email,
-        // password: passHash,
-        password,
+        password: passHash,
+        // password,
       });
       const savedUser = await newUser.save();
 
@@ -53,14 +53,17 @@ module.exports = {
           .status(400)
           .json({ msg: "No account with this email has been registered!" });
       }
-
       // const isMatch = await bcrypt.compare(password, user.password);
       // if (!isMatch) {
       //   res.status(400).json({ msg: "Invalid credentials!" });
       // }
-      res
-        .status(200)
-        .json({ success: true, email: email, token: "12345luggage" });
+      if (password === user.password) {
+        res
+          .status(200)
+          .json({ success: true, email: email, token: "12345luggage" });
+      } else {
+        res.status(400).json({ msg: "Invalid password!" });
+      }
     } catch (error) {
       res.status(500).json({ success: false, error: "Unknown error" });
     }
