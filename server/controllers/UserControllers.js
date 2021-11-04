@@ -1,5 +1,7 @@
 const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 module.exports = {
   getUsers: async (req, res) => {
@@ -55,9 +57,10 @@ module.exports = {
       if (!isMatch) {
         res.status(400).json({ msg: "Invalid credentials!" });
       }
-      res
-        .status(200)
-        .json({ success: true, email: email, token: "12345luggage" });
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "24h",
+      });
+      res.status(200).json({ success: true, email: email, token: token });
     } catch (error) {
       res
         .status(500)
