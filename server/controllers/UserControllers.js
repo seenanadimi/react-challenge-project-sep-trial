@@ -1,11 +1,11 @@
 const User = require("../models/user.model");
-// const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   getUsers: async (req, res) => {
     try {
-      const orders = await User.find();
-      res.status(200).json({ success: true, orders });
+      const users = await User.find();
+      res.status(200).json({ success: true, users });
     } catch (error) {
       res.status(500).json({ success: false, error });
     }
@@ -13,7 +13,6 @@ module.exports = {
   register: async (req, res) => {
     try {
       const { email, password } = req.body;
-      //validation
       if (!email || !password) {
         return res.status(400).json({ msg: "Enter all fields!" });
       }
@@ -28,7 +27,6 @@ module.exports = {
       const newUser = new User({
         email,
         password: passHash,
-        // password,
       });
       const savedUser = await newUser.save();
 
@@ -53,19 +51,63 @@ module.exports = {
           .status(400)
           .json({ msg: "No account with this email has been registered!" });
       }
-      // const isMatch = await bcrypt.compare(password, user.password);
-      // if (!isMatch) {
-      //   res.status(400).json({ msg: "Invalid credentials!" });
-      // }
-      if (password === user.password) {
-        res
-          .status(200)
-          .json({ success: true, email: email, token: "12345luggage" });
-      } else {
-        res.status(400).json({ msg: "Invalid password!" });
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        res.status(400).json({ msg: "Invalid credentials!" });
       }
+      res
+        .status(200)
+        .json({ success: true, email: email, token: "12345luggage" });
     } catch (error) {
-      res.status(500).json({ success: false, error: "Unknown error" });
+      res
+        .status(500)
+        .json({ success: false, error: "Unknown error (status 500)" });
+    }
+  },
+  deleteUser: async (req, res) => {
+    try {
+      // expects id
+      if (!req.body.id) {
+        res.status(400).json({ success: false, error: "No id supplied" });
+        return;
+      }
+
+      // make sure an order exists in the database with that id
+      const targetUser = await User.findOne({ _id: req.body.id });
+      if (!targetUser) {
+        res
+          .status(400)
+          .json({ success: false, error: "No user exists with that id!" });
+        return;
+      }
+
+      const deleteResponse = await User.deleteOne({ _id: req.body.id });
+      if (!deleteResponse || !deleteResponse) {
+        res
+          .status(400)
+          .json({ success: false, error: "Unable to delete from database" });
+        return;
+      }
+
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(500).json({ success: false, error });
+    }
+  },
+
+  deleteAllUsers: async (req, res) => {
+    try {
+      // HITTING THIS ENDPOINT DELETES ALL USERS
+      const deleteResponse = await User.deleteMany({});
+      if (!deleteResponse) {
+        res
+          .status(400)
+          .json({ success: false, error: "Error deleting all users." });
+        return;
+      }
+      res.status(200).json({ success: true, deleted: deleteResponse.n });
+    } catch (error) {
+      res.status(500).json({ success: false, error });
     }
   },
 };
