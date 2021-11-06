@@ -1,31 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Template } from '../../components';
-import { SERVER_IP } from '../../private';
-import OrdersList from './ordersList';
-import './viewOrders.css';
+import React, { useState, useEffect } from "react";
+import { Template } from "../../components";
+import "./viewOrders.css";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCurrentOrder } from "../../redux/actions/orderAction";
+import OrdersList from "./ordersList";
 
-export default function ViewOrders(props) {
-    const [orders, setOrders] = useState([]);
+export default function ViewOrders() {
+  const dispatch = useDispatch();
+  const orders = useSelector((state) => state.orderList.orders);
+  // const [orders, setOrders] = useState([]);
+  const [bool, setBoolean] = useState(false);
 
-    useEffect(() => {
-        fetch(`${SERVER_IP}/api/current-orders`)
-            .then(response => response.json())
-            .then(response => {
-                if(response.success) {
-                    setOrders(response.orders);
-                } else {
-                    console.log('Error getting orders');
-                }
-            });
-    }, [])
+  useEffect(() => {
+    dispatch(fetchCurrentOrder());
+    setBoolean(false);
+  }, [bool]);
 
-    return (
-        <Template>
-            <div className="container-fluid">
-                <OrdersList
-                    orders={orders}
-                />
-            </div>
-        </Template>
-    );
+  return (
+    <Template>
+      <div className="container-fluid">
+        <OrdersList orders={orders} setBoolean={setBoolean} />
+      </div>
+    </Template>
+  );
 }
