@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { SERVER_IP } from "../../../private";
 import { useHistory } from "react-router";
-// import { useDispatch } from "react-redux";
-// import { finishRegister } from "../../../redux/actions/authActions";
-const REGISTER = `${SERVER_IP}/api/register`;
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../../redux/actions/authActions";
 
 const RegisterForm = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const [userData, setUserData] = useState({ email: "", password: "" });
 
@@ -16,15 +14,7 @@ const RegisterForm = () => {
 
   const register = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post(REGISTER, {
-        email: userData.email,
-        password: userData.password,
-      });
-      history.push("/login");
-    } catch (err) {
-      console.log(err.response.data.msg);
-    }
+    dispatch(registerUser(userData.email, userData.password, history));
   };
 
   return (
